@@ -11,7 +11,7 @@ jobs:
     steps:
       - checkout  # Clone the repository
       - run: npm install  # Install dependencies
-      - run: npm run build  # Build the Angular app
+      - run: ng build  # Build the Angular app
 
   test:
     executor: node-executor
