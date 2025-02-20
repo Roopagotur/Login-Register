@@ -3,20 +3,27 @@ version: 2.1
 executors:
   node-executor:
     docker:
-      - image: circleci/node:latest
+      - image: circleci/node:18
 
 jobs:
   build:
     executor: node-executor
     steps:
       - checkout  # Clone the repository
+      - run: node -v  # Check Node.js version
       - run: npm install  # Install dependencies
       - run: npm run build  # Build the Angular app
+      - persist_to_workspace:
+          root: .
+          paths:
+            - dist  # Save the built app for later steps
 
   test:
     executor: node-executor
     steps:
       - checkout
+      - attach_workspace:
+          at: .
       - run: npm install
       - run: npm test  # Run tests
 
@@ -24,7 +31,9 @@ jobs:
     executor: node-executor
     steps:
       - checkout
-      - run: echo "Deploying the app..."  # Modify this for actual deployment
+      - attach_workspace:
+          at: .
+      - run: echo "Deploying the app..."  # Replace with actual deployment steps
 
 workflows:
   version: 2
