@@ -3,7 +3,7 @@ version: 2.1
 executors:
   node-executor:
     docker:
-      - image: cimg/node:18.18.2 
+      - image: cimg/node:18.19
 
 jobs:
   build:
