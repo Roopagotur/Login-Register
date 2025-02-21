@@ -3,28 +3,35 @@ version: 2.1
 executors:
   node-executor:
     docker:
-      - image: cimg/node:18.19
+      - image: cimg/node:18.19  # Ensures Angular's required Node.js version
 
 jobs:
   build:
     executor: node-executor
     steps:
-      - checkout  # Clone the repository
-      - run: npm install  # Install dependencies
-      - run: npm run build  # Build the Angular app
+      - checkout
+      - run: npm install
+      - run: npm run build
 
   test:
     executor: node-executor
     steps:
       - checkout
       - run: npm install
-      - run: npm test  # Run tests
+      - run:
+          name: Install Chrome
+          command: |
+            sudo apt update
+            sudo apt install -y google-chrome-stable
+      - run:
+          name: Run Tests
+          command: CHROME_BIN=$(which google-chrome) npm test
 
   deploy:
     executor: node-executor
     steps:
       - checkout
-      - run: echo "Deploying the app..."  # Modify this for actual deployment
+      - run: echo "Deploying the app..."  # Modify for actual deployment
 
 workflows:
   version: 2
